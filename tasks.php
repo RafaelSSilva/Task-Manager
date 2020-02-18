@@ -1,6 +1,7 @@
 
 <?php 
     session_start(); 
+    require "database.php";
     
   
     if (array_key_exists('name', $_GET) && $_GET['name'] != '') :
@@ -38,9 +39,11 @@
 
 
     $list_tasks = [];
-    if (array_key_exists('list_tasks', $_SESSION)) :
-        $list_tasks = $_SESSION['list_tasks'];
-    endif;
+    // if (array_key_exists('list_tasks', $_SESSION)) :
+    //     $list_tasks = $_SESSION['list_tasks'];
+    // endif;
+    $list_tasks = getTasks($connection);
+
 
     include "template.php";
 ?>
