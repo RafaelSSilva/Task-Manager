@@ -16,79 +16,10 @@
 <body>
     <div class="container">
         <h1>Gerenciador de Tarefas</h1>
-
-        <form>
-            <div class="form-group">
-                <label for="name">Tarefa</label>
-                <input id="name" name="name" class="form-control" type="text" placeholder="Tarefa">
-            </div>
-
-
-            <div class="form-group">
-                <label for="description">Descrição (Opcional)</label>
-                <textarea class="form-control" id="description" name="description"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="term">Prazo (Opcional)</label>
-                <input id="term" name="term" class="form-control" type="text" placeholder="Prazo" checked>
-            </div>
-
-            <div class="form-group">
-                <label for="priority">Prioridade</label>
-
-                <div class="form-check">
-                    <input name="priority" type="radio" value="1" checked class="form-check-input">
-                    <label class="form-check-label" for="priority1">Baixa</label>
-                </div>
-
-                <div class="form-check">
-                    <input name="priority" type="radio" value="2" class="form-check-input">
-                    <label class="form-check-label" for="priority">Média</label>
-                </div>
-
-                <div class="form-check">
-                    <input name="priority" type="radio" value="3" class="form-check-input">
-                    <label class="form-check-label" for="priority">Alta</label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="form-check">
-                    <input name="high" type="checkbox" value="1" class="form-check-input">
-                    <label class="form-check-label" for="high">
-                        Tarefa concluída
-                    </label>
-                </div>
-            </div>
-
-
-            <div class="text-right">
-                <button type="submit" class="btn btn-primary">Entrar</button>
-            </div>
-        </form>
-
-        <br>
-
-        <table class="table">
-            <thead>
-                <td>Tarefas</td>
-                <td>Descricao</td>
-                <td>Prazo</td>
-                <td>Prioridade</td>
-                <td>Concluida</td>
-            </thead>
-
-            <?php foreach ($list_tasks as $task) : ?>
-                <tr>
-                    <td><?php echo $task['name'];?></td>
-                    <td><?php echo $task['description'];?></td>
-                    <td><?php echo translateDateShow($task['term']);?></td>
-                    <td><?php echo translatesPriority($task['priority']); ?></td>
-                    <td><?php echo translateHigh($task['high']); ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
+        <?php require 'form.php'; ?>
+        <?php if ($showTable) : ?>
+            <?php require '../Task-Manager/table.php'; ?>
+        <?php endif; ?>
     </div>
 
     <!-- JavaScript (Opcional) -->

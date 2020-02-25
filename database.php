@@ -29,6 +29,13 @@ function getTasks($connection)
     return $tasks;
 }
 
+function getTask($connection, $id)
+{
+    $sql = 'SELECT * FROM tasks WHERE id = ' . $id;
+    $result = mysqli_query($connection, $sql);
+    return mysqli_fetch_assoc($result);
+}
+
 function addTask($connection, $task)
 {
     $sql = "INSERT INTO tasks 
@@ -42,4 +49,19 @@ function addTask($connection, $task)
         )";
 
     $result = mysqli_query($connection, $sql);
+}
+
+function updateTask($connection, $task)
+{
+    $sql ="UPDATE tasks SET
+            name = '{$task['name']}', 
+            description = '{$task['description']}',
+            term = '{$task['term']}',
+            priority = {$task['priority']},
+            high = {$task['high']}
+         
+          WHERE id = {$task['id']}
+    ";
+
+    mysqli_query($connection, $sql);
 }
