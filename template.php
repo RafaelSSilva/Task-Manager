@@ -38,24 +38,24 @@
                 <label for="priority">Prioridade</label>
 
                 <div class="form-check">
-                    <input name="priority" type="radio" value="baixa" checked class="form-check-input">
+                    <input name="priority" type="radio" value="1" checked class="form-check-input">
                     <label class="form-check-label" for="priority1">Baixa</label>
                 </div>
 
                 <div class="form-check">
-                    <input name="priority" type="radio" value="media" class="form-check-input">
+                    <input name="priority" type="radio" value="2" class="form-check-input">
                     <label class="form-check-label" for="priority">Média</label>
                 </div>
 
                 <div class="form-check">
-                    <input name="priority" type="radio" value="alta" class="form-check-input">
+                    <input name="priority" type="radio" value="3" class="form-check-input">
                     <label class="form-check-label" for="priority">Alta</label>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="form-check">
-                    <input name="high" type="checkbox" value="alta" class="form-check-input">
+                    <input name="high" type="checkbox" value="1" class="form-check-input">
                     <label class="form-check-label" for="high">
                         Tarefa concluída
                     </label>
@@ -76,14 +76,16 @@
                 <td>Descricao</td>
                 <td>Prazo</td>
                 <td>Prioridade</td>
+                <td>Concluida</td>
             </thead>
 
             <?php foreach ($list_tasks as $task) : ?>
                 <tr>
                     <td><?php echo $task['name'];?></td>
                     <td><?php echo $task['description'];?></td>
-                    <td><?php echo $task['term'];?></td>
-                    <td><?php echo $task['priority'];?></td>
+                    <td><?php echo translateDateShow($task['term']);?></td>
+                    <td><?php echo translatesPriority($task['priority']); ?></td>
+                    <td><?php echo translateHigh($task['high']); ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>

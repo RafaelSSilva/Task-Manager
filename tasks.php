@@ -2,8 +2,8 @@
 <?php 
     session_start(); 
     require "database.php";
+    require "helpers.php";
     
-  
     if (array_key_exists('name', $_GET) && $_GET['name'] != '') :
         $task = [];
         
@@ -16,7 +16,7 @@
         }
         
         if(array_key_exists('term', $_GET)){
-            $task['term'] = $_GET['term'];
+            $task['term'] = translateDate($_GET['term']);
         }else{
             $task['term'] = '';
         }
@@ -28,13 +28,13 @@
         }
 
         if(array_key_exists('high', $_GET)){
-            $task['high'] = $_GET['high'];
+            $task['high'] = 1;
         }else{
-            $task['high'] = '';
+            $task['high'] = 0;
         }
 
-
-        $_SESSION['list_tasks'][] = $task;
+        addTask($connection, $task);
+        // $_SESSION['list_tasks'][] = $task;
     endif;
 
 
@@ -45,7 +45,7 @@
     $list_tasks = getTasks($connection);
 
 
-    include "template.php";
+    require "template.php";
 ?>
 
 
