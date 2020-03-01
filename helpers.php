@@ -1,4 +1,11 @@
 <?php
+
+function havePost()
+{
+    return count($_POST) > 0 ? true : false;
+}
+
+
 function translatesPriority($cod)
 {
     $priority = '';
@@ -20,29 +27,57 @@ function translatesPriority($cod)
     return $priority;
 }
 
-function translateDate ($date){
-    if($date == '')
+function translateDateDatabase($date)
+{
+    if ($date == '')
         return '';
 
     $aux = explode("/", $date);
-    $newDate = "{$aux[2]}-{$aux[1]}-{$aux[0]}}";
+
+    if (count($aux) != 3) 
+        return $date;
     
-    return $newDate;
+    $new_date = DateTime::createFromFormat('d/m/Y', $date);
+    return $new_date->format('Y-m-d');
 }
 
-function translateDateShow ($date){
-    if($date == '' OR $date == '0000-00-00')
+function translateDateShow($date)
+{
+    if ($date == '' OR $date == '0000-00-00')
         return '';
 
+
+    $aux = explode("-", $date);
+    
+    if (count($aux) != 3) {
+        return $date;
+    }
+    
     $data_object = DateTime::createFromFormat('Y-m-d', $date);
     return $data_object->format('d/m/Y');
-
-    // $aux = explode("-", $date);
-    // $newDate = "{$aux[2]}/{$aux[1]}/{$aux[0]}";
-    
-    // return $newDate;
 }
 
-function translateHigh($data){
+function translateHigh($data)
+{
     return $data == 0 ? 'Não' : 'Sim';
+}
+
+function checkDateTerm($date)
+{
+    $default = '/^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/';
+    $result = preg_match($default, $date);
+    
+    if($result == 0){
+        return false;
+    }
+
+    $data = explode('/', $date);
+
+    $day = $data[0];
+    $month = $data[1];
+    $year= $data[2];
+
+    $result = checkdate($month, $day, $year);
+
+    return $result;
 }

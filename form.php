@@ -1,10 +1,17 @@
-<form>
+<form method="POST">
     <div class="form-group">
         <input name="id" class="form-control" type="hidden" value="<?php echo $task['id']; ?>">
     </div>
 
     <div class="form-group">
-        <label for="name">Tarefa</label>
+        <label for="name">Tarefa:
+            <?php
+            if ($haveError && array_key_exists('name', $listError)) : ?>
+                <span class="alert-danger">
+                    <?php echo $listError['name']; ?>
+                </span>
+            <?php endif; ?>
+        </label>
         <input id="name" name="name" class="form-control" type="text" placeholder="Tarefa" value="<?php echo $task['name']; ?>">
     </div>
 
@@ -15,9 +22,16 @@
     </div>
 
     <div class="form-group">
-        <label for="term">Prazo (Opcional)</label>
-        <input id="term" name="term" class="form-control" type="text" placeholder="Prazo" 
-        value="<?php echo translateDateShow($task['term']); ?>">
+        <label for="term">Prazo (Opcional)
+            <?php
+            if ($haveError && array_key_exists('term', $listError)) : ?>
+                <span class="alert-danger">
+                    <?php echo $listError['term']; ?>
+                </span>
+            <?php endif; ?>
+        </label>
+        
+        <input id="term" name="term" class="form-control" type="text" placeholder="Prazo" value="<?php echo translateDateShow($task['term']); ?>">
     </div>
 
     <div class="form-group">
