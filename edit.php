@@ -35,6 +35,9 @@
         }
 
         updateTask($connection, $task);
+        header('Location: tasks.php');
+        die(); //evita que o restante do arquivo seja executado de maneira desnecessária.
+
     endif;
 
     $task = getTask($connection, $_GET['id']);

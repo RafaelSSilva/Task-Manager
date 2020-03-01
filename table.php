@@ -17,6 +17,7 @@
             <td><?php echo translateHigh($task['high']); ?></td>
             <td>
                 <a href="edit.php?id=<?php echo $task['id']; ?>">Editar</a>
+                <a href="remove.php?id=<?php echo $task['id']?>">Remover</a>
             </td>
 
         </tr>

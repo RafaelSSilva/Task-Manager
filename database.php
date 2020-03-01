@@ -53,7 +53,7 @@ function addTask($connection, $task)
 
 function updateTask($connection, $task)
 {
-    $sql ="UPDATE tasks SET
+    $sql = "UPDATE tasks SET
             name = '{$task['name']}', 
             description = '{$task['description']}',
             term = '{$task['term']}',
@@ -63,5 +63,11 @@ function updateTask($connection, $task)
           WHERE id = {$task['id']}
     ";
 
+    mysqli_query($connection, $sql);
+}
+
+function deleteTask($connection, $id)
+{
+    $sql = "DELETE FROM tasks WHERE id = {$id}";
     mysqli_query($connection, $sql);
 }

@@ -35,6 +35,9 @@ if (array_key_exists('name', $_GET) && $_GET['name'] != '') :
     }
 
     addTask($connection, $task);
+    header('Location: tasks.php');
+    die();
+
 // $_SESSION['list_tasks'][] = $task;
 endif;
 
