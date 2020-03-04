@@ -10,14 +10,18 @@
 
     <?php foreach ($list_tasks as $task) : ?>
         <tr>
-            <td><?php echo $task['name']; ?></td>
+            <td>
+                <a href="task.php?id=<?php print $task['id']; ?>">
+                    <?php echo $task['name']; ?>
+                </a>
+            </td>
             <td><?php echo $task['description']; ?></td>
             <td><?php echo translateDateShow($task['term']); ?></td>
             <td><?php echo translatesPriority($task['priority']); ?></td>
             <td><?php echo translateHigh($task['high']); ?></td>
             <td>
                 <a href="edit.php?id=<?php echo $task['id']; ?>">Editar</a>
-                <a href="remove.php?id=<?php echo $task['id']?>">Remover</a>
+                <a href="remove.php?id=<?php echo $task['id'] ?>">Remover</a>
             </td>
 
         </tr>
