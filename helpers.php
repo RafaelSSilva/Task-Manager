@@ -5,7 +5,7 @@ function havePost()
     return count($_POST) > 0 ? true : false;
 }
 
-
+/**Traduz a prioridade da tarefa para exibição. 1 = Baixa, 2 = Média e 3 = Alta */
 function translatesPriority($cod)
 {
     $priority = '';
@@ -41,6 +41,7 @@ function translateDateDatabase($date)
     return $new_date->format('Y-m-d');
 }
 
+/**Traduz a data do banco para o formato de data d/m/Y  */
 function translateDateShow($date)
 {
     if ($date == '' OR $date == '0000-00-00')
@@ -57,6 +58,7 @@ function translateDateShow($date)
     return $data_object->format('d/m/Y');
 }
 
+/**verifica/retorna se a tarefa foi concluida: 0 => não e 1 => sim.  */
 function translateHigh($data)
 {
     return $data == 0 ? 'Não' : 'Sim';
@@ -80,4 +82,21 @@ function checkDateTerm($date)
     $result = checkdate($month, $day, $year);
 
     return $result;
+}
+
+/** Verifica a extensão do arquivo(.pdf e .zip) com regex e salva ele no sistema de arquivos. */
+function checkAnexo($anexo){
+    $default = '/^.+(\.pdf|\.zip)$/';
+    $result = preg_match($default, $anexo['name']);
+
+    if($result == 0){
+        return false;
+    }
+
+    move_uploaded_file(
+        $anexo['tmp_name'],
+        "anexos/{$anexo['name']}"
+    );
+
+    return true;
 }
