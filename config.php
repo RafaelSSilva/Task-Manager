@@ -12,16 +12,12 @@
      * Autor: Rafael 
      */
 
-     define("BD_SERVER", "");    
-     define("BD_USER", "");    
-     define("BD_DATABASE", "");    
-     define("BD_PASSWORD", ""); 
-     define("EMAIL_RECIPIENT", ""); 
-     define("EMAIL_SENDER", ""); 
-     define("EMAIL_SENDER_PASSWORD", "");
-    
-    
-    
-  
+     //  define("BD_SERVER", "");    
+     //  define("BD_USER", "");    
+     //  define("BD_DATABASE", "");    
+     //  define("BD_PASSWORD", ""); 
+     //  define("EMAIL_RECIPIENT", ""); 
+     //  define("EMAIL_SENDER", ""); 
+     //  define("EMAIL_SENDER_PASSWORD", "");
 
-    ?>
+     
