@@ -1,80 +1,77 @@
 
 <?php
-session_start();
+require "config.php";
 require "database.php";
 require "helpers.php";
-$showTable = true;
+require "class/task.php";
+require "class/repository_task.php";
+require "class/repository_anexo.php";
+require "class/anexo.php";
 
+
+$repository_task = new RepositoryTask($connection);
+
+$showTable = true;
 $haveError = false;
 $listError = array();
 
+$task = new Task();
+$task->setPriority(1);
 
 if (havePost()) :
-    $task = [];
-
     if (array_key_exists('name', $_POST) && strlen($_POST['name']) > 0) {
-        $task['name'] = $_POST['name'];
+        $task->setName($_POST['name']);
     } else {
         $haveError = true;
         $listError['name'] = 'O nome da tarefa é obrigatório!';
     }
 
     if (array_key_exists('description', $_POST)) {
-        $task['description'] = $_POST['description'];
+        $task->setDescription($_POST['description']);
     } else {
-        $task['description'] = '';
+        $task->setDescription('');
     }
 
     if (array_key_exists('term', $_POST) && strlen($_POST['term']) > 0) {
         if (checkDateTerm($_POST['term'])) {
-            $task['term'] = translateDateDatabase($_POST['term']);
+            $task->setTerm(translateDateBrToObject($_POST['term']));
         } else {
             $haveError = true;
             $listError['term'] = 'O prazo não é uma data válida!';
         }
     } else {
-        $task['term'] = '';
+        $task->setTerm(new DateTime('0000-00-00'));
     }
 
     if (array_key_exists('priority', $_POST) && strlen($_POST['priority']) > 0) {
-        $task['priority'] = $_POST['priority'];
+        $task->setPriority($_POST['priority']);
     } else {
-        $task['priority'] = '';
+        $task->setPriority('');
     }
 
     if (array_key_exists('high', $_POST)) {
-        $task['high'] = 1;
+        $task->setHigh(1);
     } else {
-        $task['high'] = 0;
+        $task->setHigh(0);
     }
 
 
     if (!$haveError) {
-        addTask($connection, $task);
+        $repository_task->add($task);
+
+        // envia lembrete de e-mail
+        if (array_key_exists('email-task', $_POST)) {
+            sendEmail($task);
+        }
+
         header('Location: tasks.php');
         die();
     }
-
-
-// $_SESSION['list_tasks'][] = $task;
 endif;
 
 
-// if (array_key_exists('list_tasks', $_SESSION)) :
-//     $list_tasks = $_SESSION['list_tasks'];
-// endif;
-
 $list_tasks = [];
-$list_tasks = getTasks($connection);
-
-$task = [
-    'id' => 0,
-    'name' => (array_key_exists('name', $_POST)) ? $_POST['name'] : '',
-    'description' => (array_key_exists('description', $_POST)) ? $_POST['description'] : '',
-    'term' => (array_key_exists('term', $_POST)) ? $_POST['term'] : '',
-    'priority' => (array_key_exists('priority', $_POST)) ? $_POST['priority'] : '',
-    'high' => (array_key_exists('high', $_POST)) ? $_POST['high'] : '',
-];
+$list_tasks = $repository_task->getList();
 
 require "template.php";
 ?>

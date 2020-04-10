@@ -1,5 +1,7 @@
 <?php
 
+
+/**Verifica se tem dados no arrayy POST. */
 function havePost()
 {
     return count($_POST) > 0 ? true : false;
@@ -34,28 +36,43 @@ function translateDateDatabase($date)
 
     $aux = explode("/", $date);
 
-    if (count($aux) != 3) 
+    if (count($aux) != 3)
         return $date;
-    
+
     $new_date = DateTime::createFromFormat('d/m/Y', $date);
     return $new_date->format('Y-m-d');
+}
+
+
+/**Traduz um data no formato pt-br para objeto da classe DateTime */
+function translateDateBrToObject($date)
+{
+    if ($date == '')
+        return '';
+
+    $aux = explode("/", $date);
+
+    if (count($aux) != 3)
+        return $date;
+
+    return DateTime::createFromFormat('d/m/Y', $date); 
 }
 
 /**Traduz a data do banco para o formato de data d/m/Y  */
 function translateDateShow($date)
 {
-    if ($date == '' OR $date == '0000-00-00')
+    if ($date == '' or $date == '0000-00-00')
         return '';
 
 
     $aux = explode("-", $date);
-    
+
     if (count($aux) != 3) {
         return $date;
     }
-    
+
     $data_object = DateTime::createFromFormat('Y-m-d', $date);
-    return $data_object->format('d/m/Y');
+    return $data_object->format('d/m/Y'); // return string
 }
 
 /**verifica/retorna se a tarefa foi concluida: 0 => não e 1 => sim.  */
@@ -68,8 +85,8 @@ function checkDateTerm($date)
 {
     $default = '/^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/';
     $result = preg_match($default, $date);
-    
-    if($result == 0){
+
+    if ($result == 0) {
         return false;
     }
 
@@ -77,7 +94,7 @@ function checkDateTerm($date)
 
     $day = $data[0];
     $month = $data[1];
-    $year= $data[2];
+    $year = $data[2];
 
     $result = checkdate($month, $day, $year);
 
@@ -85,11 +102,12 @@ function checkDateTerm($date)
 }
 
 /** Verifica a extensão do arquivo(.pdf e .zip) com regex e salva ele no sistema de arquivos. */
-function checkAnexo($anexo){
+function checkAnexo($anexo)
+{
     $default = '/^.+(\.pdf|\.zip)$/';
     $result = preg_match($default, $anexo['name']);
 
-    if($result == 0){
+    if ($result == 0) {
         return false;
     }
 
@@ -99,4 +117,68 @@ function checkAnexo($anexo){
     );
 
     return true;
+}
+
+/**envia e-mail */
+function sendEmail(Task $task)
+{
+    require 'libs/PHPMailer/src/PHPMailer.php';
+    require 'libs/PHPMailer/src/Exception.php';
+    require 'libs/PHPMailer/src/SMTP.php';
+
+    $email = new PHPMailer\PHPMailer\PHPMailer;
+
+    try {
+        $email->isSMTP(); // define o tipo de conexão, nesse caso SMTP.
+        $email->Host = "smtp.gmail.com"; // define o endereço de servidor.
+        $email->Port = 587; //define a porta para conexão.
+        $email->SMTPSecure = 'tls'; //define a criptografia.
+        $email->SMTPAuth = true; //define que é necessário autenticar no smtp com usuário e senha.
+        $email->Username = EMAIL_SENDER; // email para autenticação
+        $email->Password = EMAIL_SENDER_PASSWORD; //password para autenticação.
+        $email->setFrom(EMAIL_SENDER, "Avisador de Tarefas"); //define o remetente do e-mail.
+        $email->addAddress(EMAIL_RECIPIENT); // define o destinatário do e-mail.
+        $email->Subject = "Aviso da tarefa: {$task->getName()}"; //define o assunto do e-mail.
+
+        $body = prepareEmailBody($task); //prepara o conteúdo do e-mail.
+        $email->msgHTML($body);
+
+        // adiciona os anexos
+        foreach ($task->getAnexos() as $anexo) {
+            $email->addAttachment("anexos/{$anexo->getFile()}");
+        }
+
+
+        if (!$email->send()) {
+            addLog($email->ErrorInfo);
+        }
+
+        return true;
+    } catch (Exception $e) {
+        addLog($email->ErrorInfo);
+        return true;
+    }
+}
+
+/**prepara o conteúdo do e-mail(template) para ser enviado. Usando output buffer*/
+function prepareEmailBody(Task $task)
+{
+    ob_start(); //Liga o buffer de saída e bloqueia saídas de dados para o navegador.
+
+    include "template_email.php"; //inclui o arquivo no buffer.
+
+    $body = ob_get_contents(); //pega o conteúdo do buffer e coloca na váriavel body. 
+
+    ob_end_clean(); //Limpa o conteúdo do buffer e desliga o buffer. 
+
+    return $body;
+}
+
+/** Adiciona a mensagem no log do sistema. */
+function addLog($msg)
+{
+    $date_msg = date('Y-m-d H:i:s');
+    $msg = "{$date_msg} {$msg}\n";
+
+    file_put_contents('log.txt', $msg, FILE_APPEND);
 }

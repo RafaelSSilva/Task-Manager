@@ -18,7 +18,7 @@
         <h1>Gerenciador de Tarefas</h1>
         <?php require 'form.php'; ?>
         <?php if ($showTable) : ?>
-            <?php require '../Task-Manager/table.php'; ?>
+            <?php require_once './table.php'; ?>
         <?php endif; ?>
     </div>
 

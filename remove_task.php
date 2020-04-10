@@ -1,8 +1,14 @@
 <?php 
+    require "config.php";
     require "database.php";
+    require "class/task.php";
+    require "class/anexo.php";
+    require "class/repository_anexo.php";
 
-    $anexo = getAnexo($connection, $_GET['id']);
-    removeAnexo($connection,  $_GET['id']);
-    unlink('anexos/' . $anexo['file']);
-    header('location: task.php?id=' . $anexo['task_id']);
+
+    $repository_anexo = new RepositoryAnexo($connection);
+    $anexo = $repository_anexo->get($_GET['id']);
+    $repository_anexo->remove($anexo->getId());
+    unlink('anexos/' . $anexo->getFile());
+    header('location: task.php?id=' . $anexo->getTask_id());
 ?>
