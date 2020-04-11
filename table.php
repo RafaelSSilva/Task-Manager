@@ -12,10 +12,10 @@
         <tr>
             <td>
                 <a href="task.php?id=<?php print $task->getId(); ?>">
-                    <?php print $task->getName();?>
+                    <?php print htmlentities($task->getName());?>
                 </a>
             </td>
-            <td><?php echo $task->getDescription() ?></td>
+            <td><?php echo htmlentities($task->getDescription()); ?></td>
             <td><?php echo translateDateShow($task->getTerm()); ?></td>
             <td><?php echo translatesPriority($task->getPriority()); ?></td>
             <td><?php echo translateHigh($task->getHigh()); ?></td>

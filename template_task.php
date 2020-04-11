@@ -10,7 +10,7 @@
 
 <body>
     <div class="container">
-        <h1 class="text-center">Tarefa: <?php print $task->getName(); ?></h1>
+        <h1 class="text-center">Tarefa: <?php print htmlentities($task->getName()); ?></h1>
 
         <p>
             <a href="tasks.php">Voltar</a>
@@ -23,7 +23,7 @@
 
         <p>
             <strong>Descrição:</strong>
-            <?php print nl2br($task->getDescription()); ?>
+            <?php print nl2br(htmlentities($task->getDescription())); ?>
         </p>
 
         <p>
@@ -48,7 +48,7 @@
 
             <?php foreach ($task->getAnexos() as $anexo) : ?>
             <tr>
-                <td><?php print $anexo->getName(); ?></td>
+                <td><?php print htmlentities($anexo->getName()); ?></td>
                 <td>
                     <a href="anexos/<?php print $anexo->getFile(); ?>">Download</a> 
                     <a href="remove_task.php?id=<?php print $anexo->getId(); ?>">Remover</a> 

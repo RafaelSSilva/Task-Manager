@@ -12,8 +12,8 @@ class RepositoryTask
     public function add(Task $task)
     {
 
-        $name = $this->connection->real_escape_string($task->getName());
-        $description = $this->connection->real_escape_string($task->getDescription());
+        $name = strip_tags($this->connection->real_escape_string($task->getName()));
+        $description = strip_tags($this->connection->real_escape_string($task->getDescription()));
         $priority = $task->getPriority();
         $high = $task->getHigh();
         $term = $task->getTerm();
@@ -45,8 +45,8 @@ class RepositoryTask
 
     public function update(Task $task)
     {
-        $name = $this->connection->real_escape_string($task->getName());
-        $description = $this->connection->real_escape_string($task->getDescription());
+        $name = strip_tags($this->connection->real_escape_string($task->getName()));
+        $description = strip_tags($this->connection->real_escape_string($task->getDescription()));
         $priority = $task->getPriority();
         $high = $task->getHigh();
         $term = $task->getTerm();

@@ -37,7 +37,7 @@
 
          /**adiciona anexo. */
          public function add (Anexo $anexo){
-            $name = $this->connection->real_escape_string($anexo->getName());
+            $name = strip_tags($this->connection->real_escape_string($anexo->getName()));
             $file = $this->connection->real_escape_string($anexo->getFile());
 
             $sql = "INSERT INTO anexos 
