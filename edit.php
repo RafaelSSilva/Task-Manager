@@ -10,7 +10,7 @@ require "class/repository_task.php";
 require "class/repository_anexo.php";
 
 
-$repository_task = new RepositoryTask($connection);
+$repository_task = new RepositoryTask($pdo);
 $task = $repository_task->get($_GET['id']);
 
 $showTable = false;

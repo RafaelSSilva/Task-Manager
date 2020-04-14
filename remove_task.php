@@ -6,7 +6,7 @@
     require "class/repository_anexo.php";
 
 
-    $repository_anexo = new RepositoryAnexo($connection);
+    $repository_anexo = new RepositoryAnexo($pdo);
     $anexo = $repository_anexo->get($_GET['id']);
     $repository_anexo->remove($anexo->getId());
     unlink('anexos/' . $anexo->getFile());

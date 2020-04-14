@@ -2,96 +2,141 @@
 
 class RepositoryTask 
 {
-    private $connection;
+    private $pdo;
 
-    public function __construct($connection)
+    public function __construct(PDO $pdo)
     {
-        $this->connection = $connection;
+        $this->pdo = $pdo;
     }
 
+    /**Adiciona tarefa */
     public function add(Task $task)
     {
-
-        $name = strip_tags($this->connection->real_escape_string($task->getName()));
-        $description = strip_tags($this->connection->real_escape_string($task->getDescription()));
-        $priority = $task->getPriority();
-        $high = $task->getHigh();
         $term = $task->getTerm();
 
         if(is_object($term)){
             $term = $term->format('Y-m-d');
         }
 
-        $sql = "INSERT INTO tasks 
-        (name, description, term, priority, high)
-        VALUES (
-            '{$name}',
-            '{$description}',
-            '{$term}',
-            '{$priority}',
-             {$high}
-        )";
+        // definindo sql com prepared statements
+        $sql = "
+            INSERT INTO tasks 
+            (name, description, term, priority, high)
+            VALUES (:name, :description, :term, :priority, :high)
+        ";
 
-        $this->connection->query($sql);
+        //preparando a query
+        $query = $this->pdo->prepare($sql);
+
+        // executando a query com os parâmetros nomeados.
+        $query->execute(
+            [
+                'name' => strip_tags($task->getName()),
+                'description' => strip_tags($task->getDescription()),
+                'priority' => $task->getPriority(),
+                'term' => $term,
+                'high' => ($task->getTerm() ? 1 : 0)
+            ]
+        );
+
     }
 
+    /**Remove tarefa */
     public function remove(int $id)
     {   
-        $id = $this->connection->real_escape_string($id);
-
-        $sql = 'DELETE FROM tasks WHERE id = ' . $id;
-        $this->connection->query($sql);
+        // definindo sql com prepared statements
+        $sql = 'DELETE FROM tasks WHERE id = :id';
+        
+        //preparando a query
+        $query = $this->pdo->prepare($sql);
+        
+        // executando a query com os parâmetros nomeados.
+        $query->execute(
+            [
+                'id' => $id,
+            ]
+        );
     }
 
+    /**Atualiza tarefa */
     public function update(Task $task)
     {
-        $name = strip_tags($this->connection->real_escape_string($task->getName()));
-        $description = strip_tags($this->connection->real_escape_string($task->getDescription()));
-        $priority = $task->getPriority();
-        $high = $task->getHigh();
         $term = $task->getTerm();
 
         if(is_object($term)){
             $term = $term->format('Y-m-d');
         }
 
-        $sql = "UPDATE tasks SET
-            name = '{$name}', 
-            description = '{$description}',
-            term = '{$term}',
-            priority = {$priority},
-            high = {$high}
-     
-             WHERE id = {$task->getId()}";
+        // definindo sql com prepared statements
+        $sql = "
+            UPDATE tasks SET
+                name = :name, 
+                description= :description,
+                term = :term,
+                priority = :priority,
+                high = :high
+             WHERE id = :id
+        ";
 
-        $this->connection->query($sql);
+        //preparando a query
+        $query = $this->pdo->prepare($sql);
+
+        // executando a query com os parâmetros nomeados.
+        $query->execute(
+            [
+                'name' => strip_tags($task->getName()),
+                'description' => strip_tags($task->getDescription()),
+                'priority' => $task->getPriority(),
+                'term' => $term,
+                'high' => ($task->getTerm() ? 1 : 0),
+                'id' => $task->getId()
+            ]
+        );
     }
 
+    /**Busca tarefa */
     public function get(int $id)
     {
-        $id = $this->connection->real_escape_string($id);
-        
-        $sql = 'SELECT * FROM tasks WHERE id = ' . $id;
-        $result = $this->connection->query($sql);
-        $task = $result->fetch_object('Task');
+        // definindo sql com prepared statements
+        $sql = 'SELECT * FROM tasks WHERE id = :id';
 
-        $repository_anexo = new RepositoryAnexo($this->connection);
+        //preparando a query
+        $query = $this->pdo->prepare($sql);
+
+        // executando a query com os parâmetros nomeados.
+        $query->execute(
+            [
+             'id' => $id
+            ]
+        );
+
+        $task = $query->fetchObject('Task');
+
+        $repository_anexo = new RepositoryAnexo($this->pdo);
         $task->setAnexos($repository_anexo->list($task->getId()));
 
         return $task;
     }
 
+    
+    /**Busca lista de tarefas */
     public function getList()
     {
-        $repository_anexo = new RepositoryAnexo($this->connection);
+        $repository_anexo = new RepositoryAnexo($this->pdo);
         $sql = 'SELECT * FROM tasks';
-        $result = $this->connection->query($sql);
+
+
+        $result = $this->pdo->query(
+            $sql,
+            PDO::FETCH_CLASS,
+            'Task'
+        );
         
         $tasks = [];
 
-        while($task = $result->fetch_object('Task')){
-            $tasks[] = $task;
+        foreach($result as $task){
             $task->setAnexos($repository_anexo->list($task->getId()));
+            $tasks[] = $task;
         }
 
         return $tasks;

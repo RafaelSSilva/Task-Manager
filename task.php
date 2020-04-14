@@ -11,8 +11,8 @@ $have_error = false;
 $errors = [];
 
 
-$repository_anexo = new RepositoryAnexo($connection);
-$repository_task = new RepositoryTask($connection);
+$repository_anexo = new RepositoryAnexo($pdo);
+$repository_task = new RepositoryTask($pdo);
 
 // upload dos anexos.
 if (havePost()) :
@@ -42,6 +42,5 @@ if (havePost()) :
 endif;
 
 $task = $repository_task->get($_GET['id']);
-
 
 include "template_task.php";
