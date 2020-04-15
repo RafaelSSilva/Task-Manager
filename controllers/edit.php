@@ -1,16 +1,5 @@
 <?php
 session_start();
-
-require "config.php";
-require "database.php";
-require "helpers.php";
-require "class/task.php";
-require "class/anexo.php";
-require "class/repository_task.php";
-require "class/repository_anexo.php";
-
-
-$repository_task = new RepositoryTask($pdo);
 $task = $repository_task->get($_GET['id']);
 
 $showTable = false;
@@ -63,10 +52,10 @@ if (havePost()) :
             sendEmail($task);
         }
 
-        header('Location: tasks.php');
+        header('Location: index.php?route=tasks');
         die(); //evita que o restante do arquivo seja executado de maneira desnecessária.
     }
 
 endif;
 
-require "template.php";
+require __DIR__ . "/../views/template.php";

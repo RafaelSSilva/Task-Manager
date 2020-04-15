@@ -11,7 +11,7 @@
     <?php foreach ($list_tasks as $task) : ?>
         <tr>
             <td>
-                <a href="task.php?id=<?php print $task->getId(); ?>">
+                <a href="index.php?route=task&id=<?php print $task->getId(); ?>">
                     <?php print htmlentities($task->getName());?>
                 </a>
             </td>
@@ -20,8 +20,8 @@
             <td><?php echo translatesPriority($task->getPriority()); ?></td>
             <td><?php echo translateHigh($task->getHigh()); ?></td>
             <td>
-                <a href="edit.php?id=<?php echo $task->getId(); ?>">Editar</a>
-                <a href="remove.php?id=<?php echo $task->getId(); ?>">Remover</a>
+                <a href="index.php?route=edit&id=<?php echo $task->getId(); ?>">Editar</a>
+                <a href="index.php?route=remove&id=<?php echo $task->getId(); ?>">Remover</a>
             </td>
 
         </tr>

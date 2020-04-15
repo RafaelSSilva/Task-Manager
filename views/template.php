@@ -8,7 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css/tasks.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/tasks.css">
 
     <title>Gerenciador de Tarefas!</title>
 </head>
@@ -17,9 +17,11 @@
     <div class="container">
         <h1>Gerenciador de Tarefas</h1>
         <?php require 'form.php'; ?>
-        <?php if ($showTable) : ?>
-            <?php require_once './table.php'; ?>
-        <?php endif; ?>
+        <?php 
+            if ($showTable) : 
+                require 'table_tasks.php'; 
+            endif; 
+        ?>
     </div>
 
     <!-- JavaScript (Opcional) -->

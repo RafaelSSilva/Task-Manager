@@ -113,7 +113,7 @@ function checkAnexo($anexo)
 
     move_uploaded_file(
         $anexo['tmp_name'],
-        "anexos/{$anexo['name']}"
+         __DIR__ . "/../anexos/{$anexo['name']}"
     );
 
     return true;
@@ -122,9 +122,9 @@ function checkAnexo($anexo)
 /**envia e-mail */
 function sendEmail(Task $task)
 {
-    require 'libs/PHPMailer/src/PHPMailer.php';
-    require 'libs/PHPMailer/src/Exception.php';
-    require 'libs/PHPMailer/src/SMTP.php';
+    require  __DIR__ . '/../libs/PHPMailer/src/PHPMailer.php';  
+    require  __DIR__ . '/../libs/PHPMailer/src/Exception.php';
+    require  __DIR__ . '/../libs/PHPMailer/src/SMTP.php';
 
     $email = new PHPMailer\PHPMailer\PHPMailer;
 
@@ -145,7 +145,7 @@ function sendEmail(Task $task)
 
         // adiciona os anexos
         foreach ($task->getAnexos() as $anexo) {
-            $email->addAttachment("anexos/{$anexo->getFile()}");
+            $email->addAttachment( __DIR__ . "/../anexos/{$anexo->getFile()}");
         }
 
 
@@ -165,7 +165,7 @@ function prepareEmailBody(Task $task)
 {
     ob_start(); //Liga o buffer de saída e bloqueia saídas de dados para o navegador.
 
-    include "template_email.php"; //inclui o arquivo no buffer.
+    include __DIR__ . '/../views/template_email.php'; //inclui o arquivo no buffer.
 
     $body = ob_get_contents(); //pega o conteúdo do buffer e coloca na váriavel body. 
 

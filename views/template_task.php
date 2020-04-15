@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>Gerenciador de Tarefas</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css/tasks.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/tasks.css">
 </head>
 
 
@@ -13,7 +13,7 @@
         <h1 class="text-center">Tarefa: <?php print htmlentities($task->getName()); ?></h1>
 
         <p>
-            <a href="tasks.php">Voltar</a>
+            <a href="index.php?route=tasks">Voltar</a>
         </p>
 
         <p>
@@ -51,7 +51,7 @@
                 <td><?php print htmlentities($anexo->getName()); ?></td>
                 <td>
                     <a href="anexos/<?php print $anexo->getFile(); ?>">Download</a> 
-                    <a href="remove_task.php?id=<?php print $anexo->getId(); ?>">Remover</a> 
+                    <a href="index.php?route=remove_anexo&id=<?php print $anexo->getId(); ?>">Remover</a> 
                 </td>
            </tr>
             <?php endforeach; ?>

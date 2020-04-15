@@ -1,18 +1,6 @@
 <?php
-require "config.php";
-require "database.php";
-require "helpers.php";
-require "class/task.php";
-require "class/repository_task.php";
-require "class/anexo.php";
-require "class/repository_anexo.php";
-
 $have_error = false;
 $errors = [];
-
-
-$repository_anexo = new RepositoryAnexo($pdo);
-$repository_task = new RepositoryTask($pdo);
 
 // upload dos anexos.
 if (havePost()) :
@@ -43,4 +31,4 @@ endif;
 
 $task = $repository_task->get($_GET['id']);
 
-include "template_task.php";
+include  __DIR__ . "/../views/template_task.php";
