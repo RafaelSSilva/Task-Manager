@@ -21,7 +21,13 @@ class Task {
     */
     private $term;
 
-     /** 
+    /** 
+    *  @var int
+    */
+    private $creationDate;
+
+
+    /** 
     *  @var int
     */
     private $priority;
@@ -32,10 +38,7 @@ class Task {
     private $high;
 
 
-
-
-
-     /** 
+    /** 
     *  @var array
     */
     private $anexos;
@@ -220,5 +223,31 @@ class Task {
 
     public function addAnexo(Anexo $anexo){
         array_push($this->anexos, $anexo);
+    }
+
+
+
+    /**
+     * Get the value of creationDate
+     *
+     * @return  int
+     */ 
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     * Set the value of creationDate
+     *
+     * @param  int  $creationDate
+     *
+     * @return  self
+     */ 
+    public function setCreationDate(int $creationDate)
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
     }
 }

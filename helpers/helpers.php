@@ -174,6 +174,7 @@ function prepareEmailBody(Task $task)
     return $body;
 }
 
+
 /** Adiciona a mensagem no log do sistema. */
 function addLog($msg)
 {
@@ -181,4 +182,69 @@ function addLog($msg)
     $msg = "{$date_msg} {$msg}\n";
 
     file_put_contents('log.txt', $msg, FILE_APPEND);
+}
+
+
+/** Cria um array com os indices que devem ser exibidos no menu da paginação. */
+function createIndixesPagination($page, $totalPages, $limit = 6){
+    $indexes = array();
+    
+    if ($totalPages <= $limit){
+        for($i = 1; $i <= $totalPages; $i++){
+            $indexes[] = $i;
+        }
+    }else{
+        if($page <= 3){
+            $indexes = [
+                0 => 1,
+                1 => 2,
+                2 => 3,
+                3 => 4,
+                4=> '+',
+                5=> $totalPages
+            ];
+        }elseif($page >= $totalPages - 2){
+            $indexes = [
+                0 => 1,
+                1 => '-',
+                2 => $totalPages - 3,
+                3 => $totalPages - 2,
+                4=> $totalPages - 1,
+                5=> $totalPages
+            ];
+        }else{
+            $indexes = [
+                0 => 1,
+                1 => '-',
+                2 => $page - 1,
+                3 => $page,
+                4=> $page + 1,
+                5=> '+',
+                6=> $totalPages
+            ];
+        }
+    }
+
+    return $indexes;
+}
+
+/** Obtem o valor de exibição da variável value no menu da paginação.*/
+function getValuePagination($value){
+    if($value == '+' || $value == '-'){
+        return '...';
+    }
+
+    return $value;
+}
+
+
+/** Obtem o próximo valor da página na paginação.*/
+function getNextValuePagination($value, $page){
+    if($value == '+'){
+        return $page + 2;
+    }elseif ($value == '-'){
+        return $page - 2;
+    }else{
+        return $value;
+    }
 }

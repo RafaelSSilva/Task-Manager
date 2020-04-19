@@ -1,6 +1,5 @@
 
 <?php
-$showTable = true;
 $haveError = false;
 $listError = array();
 
@@ -58,10 +57,19 @@ if (havePost()) :
     }
 endif;
 
+//pagination
+$totalTasks = $repository_task->countTasks();
+$limitTasks = 10;
+$totalPages = ceil($totalTasks / $limitTasks);
+$page = (isset($_GET['page']) && $_GET['page'] > 1 &&  $_GET['page'] <= $totalPages) ? (int) $_GET['page'] : 1;
+$start = ($page * $limitTasks) - $limitTasks;
+$indexes = createIndixesPagination($page, $totalPages);
 
+// get tasks
 $list_tasks = [];
-$list_tasks = $repository_task->getList();
+$list_tasks = $repository_task->getTasksPagination($start, $limitTasks);
 
+$showTable = $totalTasks > 0 ? true : false;
 require  __DIR__ .  "/../views/template.php";
 ?>
 
