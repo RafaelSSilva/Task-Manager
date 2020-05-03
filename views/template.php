@@ -10,17 +10,26 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="assets/css/tasks.css">
 
+    <!-- material design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
     <title>Gerenciador de Tarefas!</title>
 </head>
 
 <body>
     <div class="container">
         <h1>Gerenciador de Tarefas</h1>
+        <p>
+            <?php
+            if ($route == 'edit_task'): ?>
+                <a href="index.php?route=tasks"><i class="material-icons">keyboard_backspace</i></a>
+            <?php endif; ?>
+        </p>
         <?php require 'form.php'; ?>
-        <?php 
-            if ($showTable) : 
-                require 'table_tasks.php'; 
-            endif; 
+        <?php
+        if ($showTable) :
+            require 'table_tasks.php';
+        endif;
         ?>
     </div>
 

@@ -1,3 +1,15 @@
 h1 {
     text-align: center;
 }
+
+.icon-trash {
+    color: #FF0000;
+}
+
+.icon-thumb_up {
+    color: #228B22;
+}
+
+.icon-thumb_down {
+    color: #FF0000;
+}

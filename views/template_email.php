@@ -1,4 +1,4 @@
-<h1>Tarefa: <?php print $task->getName();?></h1>
+<h1>Tarefa: <?php print $task->getName(); ?></h1>
 
 <p>
     <strong>Concluída:</strong>
@@ -8,13 +8,23 @@
 
 <p>
     <strong>Descrição:</strong>
-    <?php print nl2br($task->getDescription());  ?>
+    
+    <?php 
+        if(!is_null($task->getDescription()) && strlen($task->getDescription()) > 0){
+            print nl2br($task->getDescription());
+        }
+    ?>
 </p>
 
 <p>
     <strong>Prazo:</strong>
-    <?php checkDateTerm($task->getTerm()->format('d/m/Y')) ? print $task->getTerm()->format('d/m/Y') : print '';  ?>
+    <?php
+         if(!is_null($task->getTerm())){
+            print translateDateShow($task->getTerm()); 
+        }
+    ?>
 </p>
+
 
 <p>
     <strong>Prioridade:</strong>

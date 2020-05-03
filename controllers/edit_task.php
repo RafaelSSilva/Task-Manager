@@ -1,5 +1,4 @@
 <?php
-session_start();
 $task = $repository_task->get($_GET['id']);
 
 $showTable = false;
@@ -21,14 +20,14 @@ if (havePost()) :
     }
 
     if (array_key_exists('term', $_POST) && strlen($_POST['term']) > 0) {
-        if (checkDateTerm($_POST['term'])) {
-            $task->setTerm(translateDateBrToObject($_POST['term']));
+        if (checkDateForDatabase($_POST['term'])) {
+            $task->setTerm($_POST['term']);
         } else {
             $haveError = true;
             $listError['term'] = 'O prazo não é uma data válida!';
         }
     } else {
-        $task->setTerm(new DateTime('0000-00-00'));
+        $task->setTerm(null);
     }
 
     if (array_key_exists('priority', $_POST)) {
@@ -43,11 +42,11 @@ if (havePost()) :
         $task->setHigh(0);
     }
 
-
+   
     if (!$haveError) {
         $repository_task->update($task);
         
-        // envia lembrete de e-mail
+        //envia lembrete de e-mail
         if(array_key_exists('email-task', $_POST)){
             sendEmail($task);
         }
@@ -55,7 +54,6 @@ if (havePost()) :
         header('Location: index.php?route=tasks');
         die(); //evita que o restante do arquivo seja executado de maneira desnecessária.
     }
-
 endif;
 
 require __DIR__ . "/../views/template.php";

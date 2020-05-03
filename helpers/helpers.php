@@ -1,7 +1,6 @@
 <?php
 
-
-/**Verifica se tem dados no arrayy POST. */
+/**Verifica se tem dados no array POST. */
 function havePost()
 {
     return count($_POST) > 0 ? true : false;
@@ -55,14 +54,20 @@ function translateDateBrToObject($date)
     if (count($aux) != 3)
         return $date;
 
-    return DateTime::createFromFormat('d/m/Y', $date); 
+    return DateTime::createFromFormat('d/m/Y', $date);
 }
 
 /**Traduz a data do banco para o formato de data d/m/Y  */
 function translateDateShow($date)
 {
-    if ($date == '' or $date == '0000-00-00')
+
+    if(is_null($date)){
+        return " ";
+    }
+
+    if ($date == '' or $date == '0000-00-00'){
         return '';
+    }
 
 
     $aux = explode("-", $date);
@@ -79,6 +84,41 @@ function translateDateShow($date)
 function translateHigh($data)
 {
     return $data == 0 ? 'Não' : 'Sim';
+}
+
+/**cria o ícone do campo hign.  */
+function translateHighIcon($data)
+{
+    $icon = '<i class="material-icons icon-thumb_up">thumb_up<i>';
+
+    if ($data == 0) {
+        $icon = '<i class="material-icons icon-thumb_down">thumb_down<i>';
+    }
+
+    return $icon;
+}
+
+/**verifica se a data tem o formato de yyyy-mm-dd */
+function checkDateForDatabase($date)
+{
+    $default = '/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/';
+    $result = preg_match($default, $date);
+
+    if ($result == 0) {
+        return false;
+    }
+
+    $data = explode('-', $date);
+
+    if(count($data) != 3){
+        return false;
+    }
+
+    $year = $data[0];
+    $month = $data[1];
+    $day = $data[2];
+
+    return checkdate($month, $day, $year);
 }
 
 function checkDateTerm($date)
@@ -101,7 +141,7 @@ function checkDateTerm($date)
     return $result;
 }
 
-/** Verifica a extensão do arquivo(.pdf e .zip) com regex e salva ele no sistema de arquivos. */
+/** Verifica a extensão do arquivo(.pdf e .zip) com regex. */
 function checkAnexo($anexo)
 {
     $default = '/^.+(\.pdf|\.zip)$/';
@@ -111,10 +151,32 @@ function checkAnexo($anexo)
         return false;
     }
 
+    return true;
+}
+
+// adiciona arquivo no sistema de arquivos.
+function addAnexo($anexo, $task_id)
+{
+    if (!is_dir(__DIR__ . '/../anexos')) {
+        mkdir(__DIR__ . '/../anexos');
+    }
+
+    if (!is_dir(__DIR__ . "/../anexos/{$task_id}")) {
+        mkdir("anexos/{$task_id}");
+    }
+
     move_uploaded_file(
         $anexo['tmp_name'],
-         __DIR__ . "/../anexos/{$anexo['name']}"
+        __DIR__ . "/../anexos/{$task_id}/{$anexo['name']}"
     );
+
+    return true;
+}
+
+/**remove o arquivo do sistema de arquivos. */
+function removeAnexo($task_id, $file)
+{
+    unlink(__DIR__ . "/../anexos/{$task_id}/{$file}");
 
     return true;
 }
@@ -122,7 +184,7 @@ function checkAnexo($anexo)
 /**envia e-mail */
 function sendEmail(Task $task)
 {
-    require  __DIR__ . '/../libs/PHPMailer/src/PHPMailer.php';  
+    require  __DIR__ . '/../libs/PHPMailer/src/PHPMailer.php';
     require  __DIR__ . '/../libs/PHPMailer/src/Exception.php';
     require  __DIR__ . '/../libs/PHPMailer/src/SMTP.php';
 
@@ -141,14 +203,19 @@ function sendEmail(Task $task)
         $email->Subject = "Aviso da tarefa: {$task->getName()}"; //define o assunto do e-mail.
 
         $body = prepareEmailBody($task); //prepara o conteúdo do e-mail.
+        
+        // print '<pre>';
+        // print_r($body);
+        // print '</pre>';
+
         $email->msgHTML($body);
 
         // adiciona os anexos
         foreach ($task->getAnexos() as $anexo) {
-            $email->addAttachment( __DIR__ . "/../anexos/{$anexo->getFile()}");
+            $email->addAttachment(__DIR__ . "/../anexos/{$task->getId()}/{$anexo->getFile()}");
         }
 
-
+        // envia o e-mail
         if (!$email->send()) {
             addLog($email->ErrorInfo);
         }
@@ -186,41 +253,42 @@ function addLog($msg)
 
 
 /** Cria um array com os indices que devem ser exibidos no menu da paginação. */
-function createIndixesPagination($page, $totalPages, $limit = 6){
+function createIndixesPagination($page, $totalPages, $limit = 6)
+{
     $indexes = array();
-    
-    if ($totalPages <= $limit){
-        for($i = 1; $i <= $totalPages; $i++){
+
+    if ($totalPages <= $limit) {
+        for ($i = 1; $i <= $totalPages; $i++) {
             $indexes[] = $i;
         }
-    }else{
-        if($page <= 3){
+    } else {
+        if ($page <= 3) {
             $indexes = [
                 0 => 1,
                 1 => 2,
                 2 => 3,
                 3 => 4,
-                4=> '+',
-                5=> $totalPages
+                4 => '+',
+                5 => $totalPages
             ];
-        }elseif($page >= $totalPages - 2){
+        } elseif ($page >= $totalPages - 2) {
             $indexes = [
                 0 => 1,
                 1 => '-',
                 2 => $totalPages - 3,
                 3 => $totalPages - 2,
-                4=> $totalPages - 1,
-                5=> $totalPages
+                4 => $totalPages - 1,
+                5 => $totalPages
             ];
-        }else{
+        } else {
             $indexes = [
                 0 => 1,
                 1 => '-',
                 2 => $page - 1,
                 3 => $page,
-                4=> $page + 1,
-                5=> '+',
-                6=> $totalPages
+                4 => $page + 1,
+                5 => '+',
+                6 => $totalPages
             ];
         }
     }
@@ -229,8 +297,9 @@ function createIndixesPagination($page, $totalPages, $limit = 6){
 }
 
 /** Obtem o valor de exibição da variável value no menu da paginação.*/
-function getValuePagination($value){
-    if($value == '+' || $value == '-'){
+function getValuePagination($value)
+{
+    if ($value == '+' || $value == '-') {
         return '...';
     }
 
@@ -239,12 +308,13 @@ function getValuePagination($value){
 
 
 /** Obtem o próximo valor da página na paginação.*/
-function getNextValuePagination($value, $page){
-    if($value == '+'){
+function getNextValuePagination($value, $page)
+{
+    if ($value == '+') {
         return $page + 2;
-    }elseif ($value == '-'){
+    } elseif ($value == '-') {
         return $page - 2;
-    }else{
+    } else {
         return $value;
     }
 }

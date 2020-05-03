@@ -30,7 +30,7 @@
             <?php endif; ?>
         </label>
 
-        <input id="term" name="term" class="form-control" type="text" placeholder="Prazo" value="<?php echo translateDateShow($task->getTerm()); ?>">
+        <input id="term" name="term" class="form-control" type="date" placeholder="Prazo" value="<?php echo $task->getTerm() != null ? $task->getTerm() : ''; ?>">
     </div>
 
     <div class="form-group">

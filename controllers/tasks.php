@@ -21,14 +21,14 @@ if (havePost()) :
     }
 
     if (array_key_exists('term', $_POST) && strlen($_POST['term']) > 0) {
-        if (checkDateTerm($_POST['term'])) {
-            $task->setTerm(translateDateBrToObject($_POST['term']));
+        if (checkDateForDatabase($_POST['term'])) {
+            $task->setTerm($_POST['term']);
         } else {
             $haveError = true;
             $listError['term'] = 'O prazo não é uma data válida!';
         }
     } else {
-        $task->setTerm(new DateTime('0000-00-00'));
+        $task->setTerm(null);
     }
 
     if (array_key_exists('priority', $_POST) && strlen($_POST['priority']) > 0) {

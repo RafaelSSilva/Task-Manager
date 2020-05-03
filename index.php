@@ -8,7 +8,7 @@
     require "models/anexo.php";
     require "models/repository_anexo.php";
 
-    // criar um objeto da classe repositorio tarefas e repositoriio anexo.
+    // criar um objeto da classe repositorio tarefas e repositorio anexo.
     $repository_task = new RepositoryTask($pdo);
     $repository_anexo = new RepositoryAnexo($pdo);
 
@@ -18,6 +18,7 @@
     if(array_key_exists('route', $_GET)){
         $route = (string) $_GET['route'];
     }
+
 
     //incluir o arquivo que vai tratar a requisição
     if(is_file("controllers/{$route}.php")){

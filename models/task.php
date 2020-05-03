@@ -139,7 +139,7 @@ class Task {
      *
      * @return  self
      */ 
-    public function setTerm(DateTime $term)
+    public function setTerm($term)
     {
         $this->term = $term;
 

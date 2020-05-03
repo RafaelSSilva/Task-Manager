@@ -6,11 +6,14 @@ $errors = [];
 if (havePost()) :
     $task_id = $_POST['task_id'];
 
-    if (!array_key_exists('anexo', $_FILES)) {
+    if (!array_key_exists('anexo', $_FILES) || $_FILES['anexo']['error'] > 0) {
         $have_error = true;
         $errors['anexo'] = 'Você deve selecionar um arquivo para anexar';
     } else {
         if (checkAnexo($_FILES['anexo'])) {
+            addAnexo($_FILES['anexo'], $task_id);
+
+
             $name = $_FILES['anexo']['name'];
 
             $anexo = new Anexo();

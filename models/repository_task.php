@@ -12,12 +12,6 @@ class RepositoryTask
     /**Adiciona tarefa */
     public function add(Task $task)
     {
-        $term = $task->getTerm();
-
-        if (is_object($term)) {
-            $term = $term->format('Y-m-d');
-        }
-
         // definindo sql com prepared statements
         $sql = "
             INSERT INTO tasks 
@@ -34,8 +28,8 @@ class RepositoryTask
                 'name' => strip_tags($task->getName()),
                 'description' => strip_tags($task->getDescription()),
                 'priority' => $task->getPriority(),
-                'term' => $term,
-                'high' => ($task->getTerm() ? 1 : 0)
+                'term' => $task->getTerm(),
+                'high' => $task->getHigh() ? 1 : 0
             ]
         );
     }
@@ -50,23 +44,42 @@ class RepositoryTask
         $query = $this->pdo->prepare($sql);
 
         // executando a query com os parâmetros nomeados.
-        $query->execute(
-            [
-                'id' => $id,
-            ]
-        );
+        $query->execute(['id' => $id,]);
+
+        // remove todos os anexos da tarefa do banco.
+        $sql = "DELETE FROM anexos WHERE task_id = :id";
+
+        //preparando a query
+        $query = $this->pdo->prepare($sql);
+
+        // executando a query com os parâmetros nomeados.
+        $query->execute(['id' => $id]);
+
+        // remove o diretório da pasta de dentro do sistema de arquivos.
+        $folder =  is_dir(__DIR__ . "/../anexos/{$id}") ? __DIR__ . "/../anexos/{$id}" : '';
+
+        if (strlen($folder) <= 0) {
+            return;
+        }
+
+        $directory = dir($folder);
+
+        while ($file = $directory->read()) {
+            if ($file != '..' && $file != '.') {
+                unlink("{$folder}/$file");
+            }
+        }
+
+        $directory->close();
+
+        // remove pasta
+        rmdir($folder);
     }
 
     /**Atualiza tarefa */
     public function update(Task $task)
     {
-        $term = $task->getTerm();
-
-        if (is_object($term)) {
-            $term = $term->format('Y-m-d');
-        }
-
-        // definindo sql com prepared statements
+       // definindo sql com prepared statements
         $sql = "
             UPDATE tasks SET
                 name = :name, 
@@ -86,8 +99,8 @@ class RepositoryTask
                 'name' => strip_tags($task->getName()),
                 'description' => strip_tags($task->getDescription()),
                 'priority' => $task->getPriority(),
-                'term' => $term,
-                'high' => ($task->getTerm() ? 1 : 0),
+                'term' => $task->getTerm(),
+                'high' => $task->getHigh(),
                 'id' => $task->getId()
             ]
         );
@@ -133,7 +146,7 @@ class RepositoryTask
         $query->bindParam(":end", $end, PDO::PARAM_INT);
 
         $query->execute();
-        
+
         return $query->fetchAll(PDO::FETCH_CLASS, "Task");
     }
 
@@ -168,5 +181,25 @@ class RepositoryTask
         $result->execute();
 
         return $result->fetchColumn();
+    }
+
+    /**
+     * Get the value of pdo
+     */
+    public function getPdo()
+    {
+        return $this->pdo;
+    }
+
+    /**
+     * Set the value of pdo
+     *
+     * @return  self
+     */
+    public function setPdo($pdo)
+    {
+        $this->pdo = $pdo;
+
+        return $this;
     }
 }
