@@ -6,32 +6,47 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="assets/css/tasks.css">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/icons.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/form.css">
 
     <!-- material design -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
     <title>Gerenciador de Tarefas!</title>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Gerenciador de Tarefas</h1>
-        <p>
-            <?php
-            if ($route == 'edit_task'): ?>
-                <a href="index.php?route=tasks"><i class="material-icons">keyboard_backspace</i></a>
-            <?php endif; ?>
-        </p>
-        <?php require 'form.php'; ?>
-        <?php
-        if ($showTable) :
-            require 'table_tasks.php';
-        endif;
-        ?>
-    </div>
+    <!-- barra de menu -->
+    <header>
+        <nav class="menu">
+            <ul>
+                <li>
+                    <a href="index.php?route=tasks"><i class="material-icons  color-black md-30">home</i></a>
+                </li>
+                <li>
+                    <a href="index.php?route=add_task"><i class="material-icons color-black md-30">add</i></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <?php
+    switch ($route) {
+        case 'add_task':
+        case 'edit_task':
+            require 'form.php';
+            break;
+        case 'task':
+            require 'template_task.php';
+            break;
+        default;
+            require 'tasks.php';
+            break;
+    }
+    ?>
 
     <!-- JavaScript (Opcional) -->
     <!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->

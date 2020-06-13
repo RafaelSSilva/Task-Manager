@@ -1,0 +1,4 @@
+2020-06-13 15:06:43 SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2020-06-13 17:17:29 SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2020-06-13 17:20:31 SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2020-06-13 17:21:01 SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting

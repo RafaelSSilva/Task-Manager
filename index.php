@@ -19,7 +19,6 @@
         $route = (string) $_GET['route'];
     }
 
-
     //incluir o arquivo que vai tratar a requisição
     if(is_file("controllers/{$route}.php")){
         require "controllers/{$route}.php";

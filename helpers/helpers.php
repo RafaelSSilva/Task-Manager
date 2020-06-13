@@ -89,10 +89,10 @@ function translateHigh($data)
 /**cria o ícone do campo hign.  */
 function translateHighIcon($data)
 {
-    $icon = '<i class="material-icons icon-thumb_up">thumb_up<i>';
+    $icon = '<span><i class="material-icons md-36 color-green">thumb_up</i></span>';
 
     if ($data == 0) {
-        $icon = '<i class="material-icons icon-thumb_down">thumb_down<i>';
+        $icon = '<span><i class="material-icons md-36 color-red">thumb_down</i></span>';
     }
 
     return $icon;

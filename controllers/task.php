@@ -34,4 +34,4 @@ endif;
 
 $task = $repository_task->get($_GET['id']);
 
-include  __DIR__ . "/../views/template_task.php";
+include  __DIR__ . "/../views/template.php";

@@ -1,7 +1,6 @@
 <?php
 $task = $repository_task->get($_GET['id']);
 
-$showTable = false;
 $haveError = false;
 $listError = array();
 

@@ -1,0 +1,111 @@
+.container-form {
+    background-color: #eeeeee;
+    border-radius: 10px;
+    margin: 1vh auto 5vh auto;
+    padding: 10px 20px 10px 0;
+    width: 30vw;
+}
+
+.row {
+    margin: 10px 10px 20px 10px;
+    width: 100%;
+    /* background-color: yellow; */
+}
+
+label {
+    display: inline-block;
+    font-size: 16px;
+    margin: 0 5px 0 5px;
+    padding: 0;
+}
+
+input[type=text],
+input[type=date],
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+}
+
+input[type=checkbox] {
+    display: inline-block;
+    position: relative;
+    left: -1px;
+}
+
+input[type='checkbox']::after {
+    width: 15px;
+    height: 15px;
+    top: -1px;
+    left: -1px;
+    position: relative;
+    background-color: #d1d3d1;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+    padding-left: 5px;
+}
+
+input[type='checkbox']:checked::after {
+    width: 15px;
+    height: 15px;
+    top: -1px;
+    left: -1px;
+    position: relative;
+    background-color: #000000;
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+    content: 'X';
+    color: white;
+    padding-left: 5px;
+}
+
+input[type='radio']::after {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    top: -2px;
+    left: -1px;
+    position: relative;
+    background-color: #d1d3d1;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+}
+
+input[type='radio']:checked::after {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    top: -2px;
+    left: -1px;
+    position: relative;
+    background-color: #000000;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+}
+
+input[type=submit] {
+    background-color: #000000;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+}
