@@ -13,7 +13,7 @@
     $repository_anexo = new RepositoryAnexo($pdo);
 
     //verificar qual arquivo(rota) deve ser usado para tratar requisição.
-    $route = 'tasks'; //rota padrão
+    $route = 'home'; //rota padrão
 
     if(array_key_exists('route', $_GET)){
         $route = (string) $_GET['route'];
