@@ -18,8 +18,10 @@
 
 
 // Acesso ao banco de dados.
-define("BD_USER", "manager_tasks");
-define("BD_PASSWORD", "E7A4aYTPk80RpCwc");
+// define("BD_USER", "");
+// define("BD_PASSWORD", "");
+define("BD_USER", "ark");
+define("BD_PASSWORD", "ark");
 define("BD_DSN", "mysql:dbname=tasks;host=localhost");
 
 
@@ -33,3 +35,7 @@ define("EMAIL_RECIPIENT", "rafael.ssilva03@gmail.com");
 // email do remetente
 define("EMAIL_SENDER", "manager.tasks800@gmail.com");
 define("EMAIL_SENDER_PASSWORD", "osXQB9M9H5Uw");
+
+//script init_database.php
+define("LOGIN_DEFAULT","adm");
+define("EMAIL_DEFAULT","rafael.ssilva03@gmail.com");
